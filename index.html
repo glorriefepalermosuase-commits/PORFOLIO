@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portfolio – Glorrie Fe S. Palermo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:    #0d1b2a;
+      --slate:   #1b2d40;
+      --steel:   #2e4057;
+      --gold:    #c9a84c;
+      --gold-lt: #e2c97e;
+      --cream:   #f4f0e8;
+      --white:   #ffffff;
+      --muted:   #8a9bb0;
+      --border:  rgba(201,168,76,.25);
+    }
+
+    html { scroll-behavior: smooth; scroll-padding-top: 68px; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--navy); color: var(--cream); overflow-x: hidden; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 900; display: flex; align-items: center; justify-content: space-between; padding: 0 6vw; height: 68px; background: rgba(13,27,42,.97); backdrop-filter: blur(14px); border-bottom: 1px solid var(--border); }
+    .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--gold); letter-spacing: .04em; text-decoration: none; white-space: nowrap; }
+    .nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: .88rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; position: relative; transition: color .25s; }
+    .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1.5px; background: var(--gold); transition: width .3s; }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; background: none; border: none; cursor: pointer; padding: 6px; }
+    .nav-hamburger span { display: block; width: 24px; height: 2px; background: var(--gold); border-radius: 2px; transition: all .3s; }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .nav-mobile { display: none; position: fixed; top: 68px; left: 0; right: 0; background: rgba(13,27,42,.99); border-bottom: 1px solid var(--border); z-index: 899; flex-direction: column; padding: 1.2rem 6vw 1.6rem; gap: .2rem; }
+    .nav-mobile.open { display: flex; }
+    .nav-mobile a { color: var(--muted); text-decoration: none; font-size: 1rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; padding: .75rem 0; border-bottom: 1px solid rgba(255,255,255,.05); transition: color .2s; }
+    .nav-mobile a:last-child { border-bottom: none; }
+    .nav-mobile a:hover { color: var(--gold); }
+
+    /* HERO */
+    #home { min-height: 100vh; display: flex; align-items: center; padding: 100px 6vw 60px; position: relative; overflow: hidden; }
+    .hero-grid-bg { position: absolute; inset: 0; background-image: linear-gradient(rgba(201,168,76,.04) 1px,transparent 1px), linear-gradient(90deg,rgba(201,168,76,.04) 1px,transparent 1px); background-size: 60px 60px; }
+    .hero-glow { position: absolute; top: -120px; right: -100px; width: 600px; height: 600px; background: radial-gradient(circle,rgba(201,168,76,.12) 0%,transparent 70%); pointer-events: none; }
+    .hero-content { position: relative; width: 100%; display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 3rem; }
+    .hero-text { flex: 1; }
+    .hero-eyebrow { font-size: .78rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem; opacity: 0; animation: fadeUp .7s .2s forwards; }
+    .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(2.8rem,6vw,5rem); line-height: 1.12; color: var(--white); margin-bottom: 1.4rem; opacity: 0; animation: fadeUp .7s .35s forwards; }
+    .hero-title span { color: var(--gold); }
+    .hero-sub { font-size: 1.05rem; color: var(--muted); line-height: 1.7; max-width: 480px; margin-bottom: 2.4rem; opacity: 0; animation: fadeUp .7s .5s forwards; }
+    .hero-cta { display: inline-flex; align-items: center; gap: .6rem; padding: .8rem 2rem; border: 1.5px solid var(--gold); color: var(--gold); text-decoration: none; font-size: .88rem; letter-spacing: .08em; text-transform: uppercase; transition: background .25s, color .25s; opacity: 0; animation: fadeUp .7s .65s forwards; }
+    .hero-cta:hover { background: var(--gold); color: var(--navy); }
+    .hero-image-wrap { flex: 0 0 auto; display: flex; align-items: center; justify-content: flex-end; opacity: 0; animation: fadeUp .7s .45s forwards; }
+    .hero-image-wrap img { width: clamp(220px,28vw,360px); height: 500px; max-height: calc(100vh - 140px); object-fit: cover; border-radius: 12px; border: 2px solid var(--border); box-shadow: 0 24px 60px rgba(0,0,0,.45); display: block; }
+
+    /* SECTIONS */
+    section { padding: 100px 6vw; }
+    .section-label { font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: .6rem; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.9rem,3.5vw,2.8rem); color: var(--white); margin-bottom: 3rem; }
+    .section-title span { color: var(--gold); }
+    .divider { width: 48px; height: 2px; background: var(--gold); margin-bottom: 3rem; }
+
+    /* PROJECT CARDS */
+    #projects { background: var(--slate); }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 2rem; }
+    .project-card { background: var(--navy); border: 1px solid rgba(255,255,255,.06); display: flex; flex-direction: column; overflow: hidden; transition: transform .25s, border-color .25s, box-shadow .25s; }
+    .project-card:hover { transform: translateY(-5px); border-color: var(--border); box-shadow: 0 20px 50px rgba(0,0,0,.35); }
+    .card-media { width: 100%; aspect-ratio: 16/9; overflow: hidden; background: var(--steel); }
+    .card-media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s ease; }
+    .project-card:hover .card-media img { transform: scale(1.04); }
+    .card-body { padding: 1.4rem 1.4rem .8rem; flex: 1; }
+    .card-body h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--white); margin-bottom: .5rem; }
+    .card-body p { font-size: .85rem; color: var(--muted); line-height: 1.6; }
+    .card-footer { padding: .9rem 1.4rem; border-top: 1px solid rgba(255,255,255,.05); display: flex; align-items: center; gap: 1.2rem; }
+    .card-link { font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; color: var(--gold); display: inline-flex; align-items: center; gap: .35rem; transition: gap .2s; }
+    .card-link:hover { gap: .6rem; }
+    .card-btn-details { font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; background: none; border: 1px solid rgba(255,255,255,.1); color: var(--muted); padding: .35rem .9rem; cursor: pointer; display: inline-flex; align-items: center; gap: .4rem; transition: border-color .2s, color .2s; font-family: 'DM Sans', sans-serif; margin-left: auto; }
+    .card-btn-details:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* MODAL */
+    .modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(6,14,22,.92); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .3s; }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal-box { background: var(--navy); border: 1px solid var(--border); width: min(900px,95vw); max-height: 92vh; display: flex; flex-direction: column; overflow: hidden; transform: translateY(28px) scale(.97); transition: transform .38s cubic-bezier(.34,1.28,.64,1); }
+    .modal-overlay.open .modal-box { transform: translateY(0) scale(1); }
+    .modal-head { padding: 1.4rem 1.8rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .modal-head-title { font-family: 'Playfair Display', serif; font-size: 1.45rem; color: var(--white); }
+    .modal-close { background: none; border: none; color: var(--muted); font-size: 1.4rem; cursor: pointer; padding: .3rem; line-height: 1; transition: color .2s, transform .2s; }
+    .modal-close:hover { color: var(--gold); transform: rotate(90deg); }
+    .modal-tabs { display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .modal-tab { padding: .85rem 1.7rem; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: color .2s, border-color .2s; }
+    .modal-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+    .modal-body { overflow-y: auto; flex: 1; padding: 1.8rem; }
+    .modal-panel { display: none; }
+    .modal-panel.active { display: block; }
+
+    /* screenshots */
+    .ss-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 1rem; }
+    .ss-item { aspect-ratio: 16/9; overflow: hidden; background: var(--steel); border: 1px solid rgba(255,255,255,.06); cursor: zoom-in; position: relative; }
+    .ss-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .35s; }
+    .ss-item:hover img { transform: scale(1.05); }
+    .ss-item::after { content: '⤢'; position: absolute; top: 8px; right: 10px; color: rgba(255,255,255,.7); font-size: 1.1rem; opacity: 0; transition: opacity .2s; pointer-events: none; }
+    .ss-item:hover::after { opacity: 1; }
+    .ss-empty { padding: 2.5rem; text-align: center; border: 1.5px dashed rgba(201,168,76,.2); color: var(--muted); font-size: .82rem; letter-spacing: .06em; }
+
+    /* videos */
+    .vids-list { display: flex; flex-direction: column; gap: 1.4rem; }
+    .vid-item { background: var(--slate); border: 1px solid rgba(255,255,255,.05); overflow: hidden; }
+    .vid-item video { width: 100%; max-height: 420px; display: block; background: #000; }
+    .vid-caption { padding: .75rem 1rem; font-size: .82rem; color: var(--muted); }
+    .vid-empty { padding: 2.5rem; text-align: center; border: 1.5px dashed rgba(201,168,76,.2); color: var(--muted); font-size: .82rem; letter-spacing: .06em; }
+
+    /* details */
+    .det-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem 2.5rem; margin-bottom: 1.6rem; }
+    .det-field label { font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: .35rem; }
+    .det-field p { font-size: .9rem; color: var(--cream); line-height: 1.6; }
+    .det-field a { color: var(--gold); text-decoration: none; font-size: .88rem; }
+    .det-field a:hover { text-decoration: underline; }
+    .det-divider { height: 1px; background: var(--border); margin: 1.4rem 0; }
+    .det-desc-label { font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin-bottom: .6rem; display: block; }
+    .det-desc { font-size: .9rem; color: var(--muted); line-height: 1.8; margin-bottom: 0; }
+    .det-tech { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .5rem; }
+    .det-tech span { padding: .25rem .75rem; border: 1px solid var(--border); font-size: .75rem; color: var(--cream); letter-spacing: .04em; border-radius: 2px; }
+
+    /* LIGHTBOX */
+    .lightbox { position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,.94); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .25s; }
+    .lightbox.open { opacity: 1; pointer-events: all; }
+    .lightbox img { max-width: 94vw; max-height: 90vh; object-fit: contain; display: block; }
+    .lightbox-close { position: absolute; top: 18px; right: 24px; background: none; border: none; color: #fff; font-size: 2rem; cursor: pointer; opacity: .7; transition: opacity .2s; }
+    .lightbox-close:hover { opacity: 1; }
+
+    /* ABOUT */
+    #about { background: var(--navy); }
+    .about-inner { display: grid; grid-template-columns: 1fr 1.4fr; gap: 5rem; align-items: center; }
+    .about-img-wrap { position: relative; }
+    .about-img-placeholder { width: 100%; aspect-ratio: 3/4; background: linear-gradient(160deg,var(--steel) 0%,var(--slate) 100%); display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+    .about-img-placeholder img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .about-img-frame { position: absolute; top: 18px; left: 18px; right: -18px; bottom: -18px; border: 1.5px solid var(--border); z-index: -1; }
+    .about-text p { color: var(--muted); line-height: 1.8; margin-bottom: 1.2rem; font-size: .95rem; }
+
+    /* CONTACT */
+    #contact { background: var(--slate); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 5rem; }
+    .contact-info h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--white); margin-bottom: 1rem; }
+    .contact-item { display: flex; align-items: center; gap: .8rem; margin-bottom: .9rem; }
+    .contact-item-icon { width: 36px; height: 36px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: .9rem; flex-shrink: 0; }
+    .contact-item-text { font-size: .88rem; color: var(--muted); }
+    .contact-form { display: flex; flex-direction: column; gap: 1.1rem; }
+    .contact-form input, .contact-form textarea { background: var(--navy); border: 1px solid rgba(255,255,255,.07); color: var(--cream); padding: .75rem 1rem; font-family: 'DM Sans', sans-serif; font-size: .9rem; outline: none; transition: border-color .2s; }
+    .contact-form input:focus, .contact-form textarea:focus { border-color: var(--gold); }
+    .contact-form textarea { min-height: 120px; resize: vertical; }
+    .contact-submit { padding: .8rem 2.2rem; background: var(--gold); color: var(--navy); border: none; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: .85rem; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; align-self: flex-start; transition: background .2s; }
+    .contact-submit:hover { background: var(--gold-lt); }
+    .contact-submit:disabled { background: #555; color: #999; cursor: not-allowed; }
+
+    /* Status message */
+    .status { font-size: .82rem; padding: .6rem 1rem; border-radius: 3px; display: none; }
+    .status.success { display: block; background: #1a2e1a; color: #6fcf6f; border: 1px solid #2e4a2e; }
+    .status.error   { display: block; background: #2e1a1a; color: #cf6f6f; border: 1px solid #4a2e2e; }
+
+    /* FOOTER */
+    footer { padding: 2rem 6vw; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; font-size: .8rem; color: var(--muted); flex-wrap: wrap; gap: .5rem; }
+    footer a { color: var(--gold); text-decoration: none; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity: 1 !important; transform: translateY(0) !important; }
+    @keyframes revealFallback { to { opacity:1; transform:translateY(0); } }
+    .reveal { animation: revealFallback 0s 2s both; }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .about-inner, .contact-grid, .det-grid { grid-template-columns: 1fr; }
+      .about-img-wrap { display: none; }
+      .hero-content { flex-direction: column-reverse; align-items: center; text-align: center; }
+      .hero-image-wrap { justify-content: center; }
+      .hero-image-wrap img { width: clamp(160px,60vw,260px); height: 300px; }
+      .hero-sub { max-width: 100%; }
+      .contact-grid { gap: 2.5rem; }
+      .modal-tabs { overflow-x: auto; }
+      .modal-tab { padding: .75rem 1.1rem; font-size: .72rem; white-space: nowrap; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#home">GLORRIE FE S.PALERMO</a>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-mobile" id="navMobile">
+  <a href="#home"     onclick="closeMenu()">Home</a>
+  <a href="#projects" onclick="closeMenu()">Projects</a>
+  <a href="#about"    onclick="closeMenu()">About</a>
+  <a href="#contact"  onclick="closeMenu()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <p class="hero-eyebrow">Welcome to my portfolio</p>
+      <h1 class="hero-title">MY<br/><span>PORTFOLIO</span></h1>
+      <p class="hero-sub">This website presents a comprehensive collection of my academic activities and projects from previous subjects. It reflects the knowledge, skills, and competencies I have developed throughout my academic journey.</p>
+      <a class="hero-cta" href="#projects">View My Work &#x2192;</a>
+    </div>
+    <div class="hero-image-wrap">
+      <img src="pic3.jpg" alt="Glorrie Fe S. Palermo"/>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="reveal">
+    <p class="section-label">Selected Works</p>
+    <h2 class="section-title"><span>Projects</span></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="projects-grid">
+
+    <div class="project-card reveal">
+      <div class="card-media"><img src="LAB1/P1-1.jpg" alt="Laboratory 1"/></div>
+      <div class="card-body">
+        <h3>LABORATORY 1</h3>
+        <p>This recreational project demonstrates my creativity and ability to design engaging and visually appealing content.</p>
+      </div>
+      <div class="card-footer">
+        <button class="card-btn-details" onclick="openModal('p1')">&#x229E; Details</button>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="card-media"><img src="LAB2/B2-2.jpg" alt="Laboratory 2"/></div>
+      <div class="card-body">
+        <h3>LABORATORY 2</h3>
+        <p>This embedded systems project utilizing Arduino demonstrates my understanding of microcontroller programming, circuit design, and hardware integration.</p>
+      </div>
+      <div class="card-footer">
+        <button class="card-btn-details" onclick="openModal('p2')">&#x229E; Details</button>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="card-media"><img src="LAB3/LAB3-1.jpg" alt="Laboratory 3 NutriScan"/></div>
+      <div class="card-body">
+        <h3>LABORATORY 3 </h3>
+        <p>NutriScan is a health-focused project designed to monitor and analyze nutritional information to promote better lifestyle choices.</p>
+      </div>
+      <div class="card-footer">
+        <button class="card-btn-details" onclick="openModal('p3')">&#x229E; Details</button>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="card-media"><img src="LAB4/LAB4-1.jpg" alt="Personal Project"/></div>
+      <div class="card-body">
+        <h3>PERSONAL PROJECT</h3>
+        <p>I recently had my motorcycle cover repainted. It is now finished in a purple color.</p>
+      </div>
+      <div class="card-footer">
+        <a class="card-link" href="LAB4/LAB4-2.mp4" target="_blank">View Video &#x2192;</a>
+        <button class="card-btn-details" onclick="openModal('p4')">&#x229E; Details</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- MODAL P1 -->
+<div class="modal-overlay" id="modal-p1" onclick="closeModalOutside(event,'p1')">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">LABORATORY 1</span>
+      <button class="modal-close" onclick="closeModal('p1')">&#x2715;</button>
+    </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" data-tab="ss"  onclick="switchTab('p1','ss')">Screenshots</button>
+      <button class="modal-tab"        data-tab="det" onclick="switchTab('p1','det')">Details</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-panel active" data-tab="ss">
+        <div class="ss-grid">
+          <div class="ss-item"><img src="LAB1/P1-1.jpg" alt="Lab 1 photo 1"/></div>
+          <div class="ss-item"><img src="LAB1/P1-2.jpg" alt="Lab 1 photo 2"/></div>
+        </div>
+      </div>
+      <div class="modal-panel" data-tab="det">
+        <div class="det-grid">
+          <div class="det-field"><label>Year</label><p>2025</p></div>
+          <div class="det-field"><label>Subject</label><p>Art Appreciation</p></div>
+          <div class="det-field"><label>Role</label><p>Student / The Paint</p></div>
+        </div>
+        <div class="det-divider"></div>
+        <span class="det-desc-label">About this project</span>
+        <p class="det-desc">This recreational project demonstrates my creativity and ability to design engaging and visually appealing content.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL P2 -->
+<div class="modal-overlay" id="modal-p2" onclick="closeModalOutside(event,'p2')">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">LABORATORY 2</span>
+      <button class="modal-close" onclick="closeModal('p2')">&#x2715;</button>
+    </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" data-tab="ss"  onclick="switchTab('p2','ss')">Screenshots</button>
+      <button class="modal-tab"        data-tab="vid" onclick="switchTab('p2','vid')">Videos</button>
+      <button class="modal-tab"        data-tab="det" onclick="switchTab('p2','det')">Details</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-panel active" data-tab="ss">
+        <div class="ss-grid">
+          <div class="ss-item"><img src="LAB2/B2-2.jpg" alt="Lab 2 photo 1"/></div>
+        </div>
+      </div>
+      <div class="modal-panel" data-tab="vid">
+        <div class="vids-list">
+          <div class="vid-item">
+            <video controls><source src="LAB2/B2-1.mp4" type="video/mp4"/></video>
+            <div class="vid-caption">Completed Arduino Project.</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-panel" data-tab="det">
+        <div class="det-grid">
+          <div class="det-field"><label>Year</label><p>2025</p></div>
+          <div class="det-field"><label>Subject</label><p>Embedded</p></div>
+          <div class="det-field"><label>Role</label><p>Student / Developer</p></div>
+        </div>
+        <div class="det-divider"></div>
+        <span class="det-desc-label">About this project</span>
+        <p class="det-desc">This embedded systems project utilizing Arduino demonstrates my understanding of microcontroller programming, circuit design, and hardware integration in developing functional robotic applications.</p>
+        <div class="det-divider"></div>
+        <span class="det-desc-label">Tools / Tech Used</span>
+        <div class="det-tech"><span>Arduino</span><span>C++</span><span>Circuit Design</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL P3 -->
+<div class="modal-overlay" id="modal-p3" onclick="closeModalOutside(event,'p3')">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">LABORATORY 3</span>
+      <button class="modal-close" onclick="closeModal('p3')">&#x2715;</button>
+    </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" data-tab="ss"  onclick="switchTab('p3','ss')">Screenshots</button>
+      <button class="modal-tab"        data-tab="det" onclick="switchTab('p3','det')">Details</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-panel active" data-tab="ss">
+        <div class="ss-grid">
+          <div class="ss-item"><img src="LAB3/LAB3-1.jpg" alt="NutriScan photo 1"/></div>
+          <div class="ss-item"><img src="LAB3/LAB3-2.jpg" alt="NutriScan photo 2"/></div>
+        </div>
+      </div>
+      <div class="modal-panel" data-tab="det">
+        <div class="det-grid">
+          <div class="det-field"><label>Year</label><p>2025</p></div>
+          <div class="det-field"><label>Subject</label><p>Entrepreneurship</p></div>
+          <div class="det-field"><label>Role</label><p>Designer / Developer</p></div>
+        </div>
+        <div class="det-divider"></div>
+        <span class="det-desc-label">About this project</span>
+        <p class="det-desc">NutriScan is a health-focused project designed to monitor and analyze nutritional information to promote better lifestyle choices &mdash; covering identity, components, and guidelines.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL P4 -->
+<div class="modal-overlay" id="modal-p4" onclick="closeModalOutside(event,'p4')">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title">PERSONAL PROJECT</span>
+      <button class="modal-close" onclick="closeModal('p4')">&#x2715;</button>
+    </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" data-tab="ss"  onclick="switchTab('p4','ss')">Screenshots</button>
+      <button class="modal-tab"        data-tab="vid" onclick="switchTab('p4','vid')">Videos</button>
+      <button class="modal-tab"        data-tab="det" onclick="switchTab('p4','det')">Details</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-panel active" data-tab="ss">
+        <div class="ss-grid">
+          <div class="ss-item"><img src="LAB4/LAB4-1.jpg" alt="Motorcycle repaint"/></div>
+        </div>
+      </div>
+      <div class="modal-panel" data-tab="vid">
+        <div class="vids-list">
+          <div class="vid-item">
+            <video controls>
+              <source src="LAB4/LAB4-2.mp4" type="video/mp4"/>
+              <source src="LAB4/LAB4-3.mp4" type="video/mp4"/>
+            </video>
+            <div class="vid-caption">Motorcycle repaint &mdash; purple finish</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-panel" data-tab="det">
+        <div class="det-grid">
+          <div class="det-field"><label>Year</label><p>2025</p></div>
+          <div class="det-field"><label>Type</label><p>Personal Project</p></div>
+          <div class="det-field"><label>Item</label><p>Motorcycle cover</p></div>
+          <div class="det-field"><label>Finish Color</label><p>Purple</p></div>
+        </div>
+        <div class="det-divider"></div>
+        <span class="det-desc-label">About this project</span>
+        <p class="det-desc">I recently had my motorcycle cover repainted. It is now finished in a purple color. This personal project reflects my interest in customization and attention to detail.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="reveal">
+    <p class="section-label"></p>
+    <h2 class="section-title">About <span>Me</span></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="about-inner reveal">
+    <div class="about-img-wrap">
+      <div class="about-img-placeholder">
+        <img src="pic3.jpg" alt="Profile Picture" class="about-img">
+      </div>
+      <div class="about-img-frame"></div>
+    </div>
+  </div>
+  <br><br>
+  <div class="about-text">
+    <h1>Hello! I'm <strong class="name-highlight">GLORRIE FE S. PALERMO</strong></h1>
+    <br><br>
+    <h3 class="about-heading">My Hobbies</h3>
+    <p>During my free time, I enjoy playing online games because they help me relax and reduce stress after a busy day. It is one of the activities that keeps me entertained and allows me to connect with friends. Aside from gaming, I also play basketball from time to time.</p>
+    <p>Another activity that I truly enjoy is driving. Driving gives me a strong sense of focus and responsibility. In addition, I love listening to music. Music plays an important role in my daily life because it helps improve my mood and keeps me motivated. Overall, these hobbies help me maintain a balanced, healthy, and positive lifestyle.</p>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="reveal">
+    <p class="section-label">Get In Touch</p>
+    <h2 class="section-title">Contact <span>Me</span></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="contact-grid reveal">
+    <div class="contact-info">
+      <h3>Let's work together</h3>
+      <div class="contact-item">
+        <div class="contact-item-icon">&#x2709;</div>
+        <span class="contact-item-text">glorriefep@gmail.com</span>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">&#x260E;</div>
+        <span class="contact-item-text">09505562353</span>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">&#x2316;</div>
+        <span class="contact-item-text">Lianga City</span>
+      </div>
+    </div>
+
+    <!-- ✅ FIXED: id added, name attributes added, no onsubmit conflict -->
+    <form class="contact-form" id="contactForm">
+      <input type="text"  name="from_name"  placeholder="Your Name"       required />
+      <input type="email" name="from_email" placeholder="Your Email"      required />
+      <input type="text"  name="subject"    placeholder="Subject" />
+      <textarea           name="message"    placeholder="Your message…"   required></textarea>
+      <button class="contact-submit" type="submit" id="submitBtn">Send Message</button>
+      <div class="status" id="statusMsg"></div>
+    </form>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>&#x00A9; 2026 GLORRIE FE S. PALERMO</span>
+  <span>Built with care &middot; <a href="#home">Back to top &#x2191;</a></span>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">&#x2715;</button>
+  <img id="lightboxImg" src="" alt=""/>
+</div>
+
+<script>
+  /* ── Mobile nav ── */
+  function toggleMenu() {
+    document.getElementById('hamburger').classList.toggle('open');
+    document.getElementById('navMobile').classList.toggle('open');
+  }
+  function closeMenu() {
+    document.getElementById('hamburger').classList.remove('open');
+    document.getElementById('navMobile').classList.remove('open');
+  }
+
+  /* ── Modal ── */
+  function openModal(id) {
+    var el = document.getElementById('modal-' + id);
+    if (!el) return;
+    switchTab(id, 'ss');
+    el.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id) {
+    var el = document.getElementById('modal-' + id);
+    if (!el) return;
+    el.classList.remove('open');
+    document.body.style.overflow = '';
+    el.querySelectorAll('video').forEach(function(v){ v.pause(); });
+  }
+  function closeModalOutside(e, id) {
+    if (e.target === document.getElementById('modal-' + id)) closeModal(id);
+  }
+
+  /* ── Tab switching ── */
+  function switchTab(modalId, tabName) {
+    var modal = document.getElementById('modal-' + modalId);
+    if (!modal) return;
+    modal.querySelectorAll('.modal-panel').forEach(function(p) {
+      p.classList.toggle('active', p.dataset.tab === tabName);
+    });
+    modal.querySelectorAll('.modal-tab').forEach(function(b) {
+      b.classList.toggle('active', b.dataset.tab === tabName);
+    });
+    if (tabName !== 'vid') {
+      modal.querySelectorAll('video').forEach(function(v){ v.pause(); });
+    }
+  }
+
+  /* ── Lightbox ── */
+  function openLightbox(src) {
+    document.getElementById('lightboxImg').src = src;
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+  }
+
+  /* ── Scroll reveal ── */
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.ss-item img').forEach(function(img){
+      img.addEventListener('click', function(){ openLightbox(img.src); });
+    });
+
+    var revealEls = document.querySelectorAll('.reveal');
+    function checkVisible() {
+      revealEls.forEach(function(el){
+        var r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight - 40 && r.bottom > 0) el.classList.add('visible');
+      });
+    }
+    checkVisible();
+
+    if ('IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if (entry.isIntersecting) { entry.target.classList.add('visible'); obs.unobserve(entry.target); }
+        });
+      }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+      revealEls.forEach(function(el){ if (!el.classList.contains('visible')) obs.observe(el); });
+    } else {
+      revealEls.forEach(function(el){ el.classList.add('visible'); });
+    }
+  });
+
+  /* ── Keyboard ── */
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay.open').forEach(function(o){
+        closeModal(o.id.replace('modal-',''));
+      });
+      closeLightbox();
+      closeMenu();
+    }
+  });
+
+  /* ── EmailJS ── */
+  const EMAILJS_PUBLIC_KEY  = "1D98ieFlogHAbdmAN";
+  const EMAILJS_SERVICE_ID  = "service_bqj3rpd";
+  const EMAILJS_TEMPLATE_ID = "template_ddzv3kk";
+
+  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+  document.getElementById("contactForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const btn    = document.getElementById("submitBtn");
+    const status = document.getElementById("statusMsg");
+
+    btn.disabled     = true;
+    btn.textContent  = "Sending…";
+    status.className = "status";
+    status.textContent = "";
+
+    try {
+      await emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, this);
+      status.className   = "status success";
+      status.textContent = "✓ Message sent! I'll get back to you soon.";
+      this.reset();
+    } catch (err) {
+      console.error("EmailJS error:", err);
+      status.className   = "status error";
+      status.textContent = "✗ Failed to send. Please try again or email me directly.";
+    } finally {
+      btn.disabled    = false;
+      btn.textContent = "Send Message";
+    }
+  });
+</script>
+</body>
+</html>
